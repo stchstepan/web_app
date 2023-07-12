@@ -1,0 +1,29 @@
+<!--Шаблон страницы со списком тем получает словарь context,
+чтобы шаблон мог использовать данные, предоставляемые topics()
+-->
+
+<!--В данном файле загрузка bootstrap не нужна, так как в этом файле
+не используются никакие шаблонные теги bootstrap-->
+
+{% extends 'learning_logs/base.html' %} <!--объявляем о наследовании
+base.html-->
+
+{% block page_header %}
+  <h3>Topics</h3>
+{% endblock page_header %}
+
+{% block content %} <!--открывается блок content-->
+  <ul> 
+    {% for topic in topics %} 
+      <li><h4>
+        <a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
+      </h4></li>
+    {% empty %} 
+      <li><h3>No topics have been added yet.</h3></li>
+    {% endfor %} 
+  </ul> 
+
+  <!--Размещение ссылки после списка существующих тем.-->
+  <h3><a href="{% url 'learning_logs:new_topic' %}">Add a new topic</h3>
+
+{% endblock content %}

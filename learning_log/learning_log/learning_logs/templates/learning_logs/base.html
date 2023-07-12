@@ -1,0 +1,96 @@
+<!doctype html> <!--Файл объявляется как документ HTML...-->
+<html lang="en"> <!--...написанный на английском языке-->
+<head> <!--Начало заголовка-->
+<!--Заголовок не содержит контента: он всего лишь передает браузеру
+информацию, необходимую для для правильного отображения страницы-->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learning Log</title>
+
+  {% load bootstrap4 %} <!--Загружается коллекция шаблонов для django-
+  bootstrap4,-->
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+
+<!--Сайт состоит из двух частей: заголовка и тела-->
+
+</head> <!--Закрывается тег заголовка (конец заголовка)-->
+<body><!--Тег, открывающий тело HTML-файла.
+Тело HTML-файла содержит контент, который будет виден пользователям
+на странице-->
+
+  <!--элемент nav обозгачает раздел навигационных ссылок на странице.
+  Весь контент внутри этого элемента оформляется по правилам Bootstrap,
+  определяемым селекторами navbar.
+  Селектор определяет, к каким элементам страницы должно применяться
+  стилевое правило.
+  Все используемые селекторы определены ниже.-->
+  <nav class="navbar navbar-expand-md navbar-light bg-light mb-4 border">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'learning_logs:index' %}">
+          Learning Log</a> <!--Задается имя проекта, которое будет отображаться
+          у левого края навигационной панели, и создается ссылка на домашнюю
+          странциу; она будет отображаться на каждой странице проекта.
+          Используемый селектор оформляет эту ссылку так, что она выделяется
+          на фоне остальных ссылок-->
+        
+      <!--Определяется кнопка, которая будет отображаться, если ширины 
+      окна браузера не хватит для горизонтального отображения всей навигационной 
+      панели-->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarCollapse" aria-controls="navbarCollapse"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse collapse" id="navbarCollapse"> <!--Открывается
+      новая секция навигационной панели. div - это част навигационной панели, 
+      которая будет сворачиваться на узких экранах и окнах.-->
+        <ul class="navbar-nav me-auto mb-2 mb-md-0"> <!--Определяется набор ссылок-->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'learning_logs:topics' %}">
+              Topics</a></li>
+        </ul> <!--Конец ссылок в левой части панели навигации-->
+
+        <!--Ссылки, связанные с аккаунтом-->
+        <ul class="navbar-nav ms-auto mb-2 mb-md-0">
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <span class="navbar-text me-2">Hello, {{ user.username }}.
+                </span></li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'users:register' %}">
+                  Register</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'users:login' %}">
+                  Log in</a></li>
+          {% endif %}
+      
+        </ul> <!--Конец ссылок, связанных с аккаунтом-->
+        
+        {% if user.is_authenticated %}
+          <form action="{% url 'users:logout' %}" method='post'>
+            {% csrf_token %}
+            <button name='submit' class='btn btn-outline-secondary btn-sm'>
+              Log out</button>
+          </form>
+        {% endif %}
+      </div> <!--Закрывает сворачиваемые части навигационной панели -->
+
+    </div> <!--Закрывает контейнер навигационной панели-->
+  </nav> <!--Конец определения навигационной панели-->
+
+  <!--Основной контент страницы-->
+  <main class="container">
+    <div class="pb-2 mb-2 border-bottom">
+      {% block page_header %}{% endblock page_header %}
+    </div>
+
+    <div>
+      {% block content %}{% endblock content %}
+    </div>
+  </main>
+
+</body>
+</html>
